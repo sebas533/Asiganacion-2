@@ -2,7 +2,7 @@
 
 > **Video de demostración:** [Ver video](#)
 
-**Asignatura:** INF-3 | **Estudiante:** Luis Sebastian Roble Perez | **Matrícula:** 2168
+**Asignatura:** SR | **Estudiante:** Luis Sebastian Roble Perez | **Matrícula:** 2168
 
 ---
 
