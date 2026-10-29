@@ -1,0 +1,461 @@
+SW:
+interface GigabitEthernet0/0
+ description TRUNK-FORTIGATE
+ switchport trunk allowed vlan 10,20,30
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport mode trunk
+ ip arp inspection trust
+ negotiation auto
+ ip dhcp snooping trust
+!
+interface GigabitEthernet0/1
+ description USUARIOS
+ switchport access vlan 10
+ switchport mode access
+ switchport port-security maximum 2
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 0c94.9683.0000
+ switchport port-security
+ negotiation auto
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet0/2
+ description WEB-SERVER
+ switchport access vlan 20
+ switchport mode access
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 0cd7.247f.0000
+ switchport port-security
+ negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet0/3
+ description DB-SERVER
+ switchport access vlan 30
+ switchport mode access
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 0c85.7b75.0000
+ switchport port-security
+ negotiation auto
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/0
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet1/3
+ shutdown
+ negotiation auto
+!
+ip forward-protocol nd
+!
+ip http server
+ip http secure-server
+!
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+
+
+Fortigate :
+
+config system interface
+    edit "port1"
+        set vdom "root"
+        set mode dhcp
+        set allowaccess ping https ssh http
+        set type physical
+        set lldp-reception enable
+        set role wan
+        set snmp-index 1
+    next
+    edit "port2"
+        set vdom "root"
+        set type physical
+        set snmp-index 2
+    next
+    edit "port3"
+        set vdom "root"
+        set mode dhcp
+        set allowaccess ping https ssh http
+        set type physical
+        set snmp-index 3
+    next
+    edit "port4"
+        set vdom "root"
+        set type physical
+        set snmp-index 4
+    next
+    edit "port5"
+        set vdom "root"
+        set type physical
+        set snmp-index 5
+    next
+    edit "port6"
+        set vdom "root"
+        set type physical
+        set snmp-index 6
+    next
+    edit "port7"
+        set vdom "root"
+        set type physical
+        set snmp-index 7
+    next
+    edit "port8"
+        set vdom "root"
+        set type physical
+        set snmp-index 8
+    next
+    edit "port9"
+        set vdom "root"
+        set type physical
+        set snmp-index 9
+    next
+    edit "port10"
+        set vdom "root"
+        set type physical
+        set snmp-index 10
+    next
+    edit "naf.root"
+        set vdom "root"
+        set type tunnel
+        set src-check disable
+        set snmp-index 11
+    next
+    edit "l2t.root"
+        set vdom "root"
+        set type tunnel
+        set snmp-index 12
+    next
+    edit "ssl.root"
+        set vdom "root"
+        set type tunnel
+        set alias "SSL VPN interface"
+        set snmp-index 13
+    next
+    edit "fortilink"
+        set vdom "root"
+        set fortilink enable
+        set ip 10.255.1.1 255.255.255.0
+        set allowaccess ping fabric
+        set type aggregate
+        set lldp-reception enable
+        set lldp-transmission enable
+        set snmp-index 14
+    next
+    edit "VLAN10"
+
+FortiGate-VM64-KVM # show firewall policy
+config firewall policy
+    edit 1
+        set name "Users-to-Web"
+        set uuid b20d6d4c-b7e0-51f1-4097-880e4d3709e0
+        set srcintf "VLAN10"
+        set dstintf "VLAN20"
+        set action accept
+        set srcaddr "USERS"
+        set dstaddr "WEB-SERVER"
+        set schedule "always"
+        set service "HTTPS"
+        set utm-status enable
+        set ssl-ssh-profile "deep-inspection"
+        set file-filter-profile "Block-Executables"
+        set ips-sensor "SQL-INJECTION DETECTIONS"
+        set logtraffic all
+    next
+    edit 2
+        set name "Block-Users-DB"
+        set uuid b211c2ca-b7e0-51f1-b343-ed996d3d5db3
+        set srcintf "VLAN10"
+        set dstintf "VLAN30"
+        set srcaddr "USERS"
+        set dstaddr "DB-SERVER"
+        set schedule "always"
+
+FortiGate-VM64-KVM # show firewall address
+config firewall address
+    edit "none"
+        set uuid e7221fb6-b7de-51f1-f4ec-478982c0c983
+        set subnet 0.0.0.0 255.255.255.255
+    next
+    edit "login.microsoftonline.com"
+        set uuid e7222506-b7de-51f1-23bf-9d765376f4b3
+        set type fqdn
+        set fqdn "login.microsoftonline.com"
+    next
+    edit "login.microsoft.com"
+        set uuid e72226fa-b7de-51f1-8718-6c79632bc579
+        set type fqdn
+        set fqdn "login.microsoft.com"
+    next
+    edit "login.windows.net"
+        set uuid e7222830-b7de-51f1-9367-d9f99462ffed
+        set type fqdn
+        set fqdn "login.windows.net"
+    next
+    edit "gmail.com"
+        set uuid e7222952-b7de-51f1-d1af-a47b9ea2657b
+        set type fqdn
+        set fqdn "gmail.com"
+    next
+
+FortiGate-VM64-KVM # show ips sensor
+config ips sensor
+    edit "default"
+        set comment "Prevent critical attacks."
+        config entries
+            edit 1
+                set severity medium high critical
+            next
+        end
+    next
+    edit "sniffer-profile"
+        set comment "Monitor IPS attacks."
+        config entries
+            edit 1
+                set severity medium high critical
+            next
+        end
+    next
+    edit "wifi-default"
+        set comment "Default configuration for offloading WiFi traffic."
+        config entries
+            edit 1
+                set severity medium high critical
+            next
+        end
+    next
+
+FortiGate-VM64-KVM # show ips custom
+config ips custom
+    edit "SQL-INJECTION"
+        set signature "F-SBID( --attack_id 9916; --name \"SQLI.2168\"; --severity high; --protocol tcp; --service HTTP; --flow from_client; --pattern \"UNION SELECT\"; --context uri; --no_case; )"
+        set comment ''
+    next
+end
+
+FortiGate-VM64-KVM # show firewall DoS-policy
+FortiGate-VM64-KVM #
+FortiGate-VM64-KVM # show system interface
+config system interface
+    edit "port1"
+        set vdom "root"
+        set mode dhcp
+        set allowaccess ping https ssh http
+        set type physical
+        set lldp-reception enable
+        set role wan
+        set snmp-index 1
+    next
+    edit "port2"
+        set vdom "root"
+        set type physical
+        set snmp-index 2
+    next
+    edit "port3"
+        set vdom "root"
+        set mode dhcp
+        set allowaccess ping https ssh http
+        set type physical
+        set snmp-index 3
+    next
+    edit "port4"
+        set vdom "root"
+        set type physical
+        set snmp-index 4
+    next
+    edit "port5"
+        set vdom "root"
+        set type physical
+        set snmp-index 5
+    next
+    edit "port6"
+        set vdom "root"
+        set type physical
+        set snmp-index 6
+    next
+    edit "port7"
+        set vdom "root"
+        set type physical
+        set snmp-index 7
+    next
+    edit "port8"
+        set vdom "root"
+        set type physical
+        set snmp-index 8
+    next
+    edit "port9"
+        set vdom "root"
+        set type physical
+        set snmp-index 9
+    next
+    edit "port10"
+        set vdom "root"
+        set type physical
+        set snmp-index 10
+    next
+    edit "naf.root"
+        set vdom "root"
+        set type tunnel
+        set src-check disable
+        set snmp-index 11
+    next
+    edit "l2t.root"
+        set vdom "root"
+        set type tunnel
+        set snmp-index 12
+    next
+    edit "ssl.root"
+        set vdom "root"
+        set type tunnel
+        set alias "SSL VPN interface"
+        set snmp-index 13
+    next
+    edit "fortilink"
+        set vdom "root"
+        set fortilink enable
+        set ip 10.255.1.1 255.255.255.0
+        set allowaccess ping fabric
+        set type aggregate
+        set lldp-reception enable
+        set lldp-transmission enable
+        set snmp-index 14
+    next
+    edit "VLAN10"
+        set vdom "root"
+        set ip 20.25.216.1 255.255.255.128
+        set allowaccess ping
+        set device-identification enable
+        set role lan
+        set snmp-index 15
+        set interface "port2"
+        set vlanid 10
+    next
+    edit "VLAN20"
+        set vdom "root"
+        set ip 20.25.216.129 255.255.255.240
+        set allowaccess ping
+        set device-identification enable
+        set role lan
+        set snmp-index 16
+        set interface "port2"
+        set vlanid 20
+    next
+    edit "VLAN30"
+        set vdom "root"
+        set ip 20.25.216.145 255.255.255.240
+        set allowaccess ping
+        set device-identification enable
+        set role lan
+        set snmp-index 17
+        set interface "port2"
+        set vlanid 30
+    nextFortiGate-VM64-KVM # show ips sensor
+config ips sensor
+    edit "default"
+        set comment "Prevent critical attacks."
+        config entries
+            edit 1
+                set severity medium high critical
+            next
+        end
+    next
+    edit "sniffer-profile"
+        set comment "Monitor IPS attacks."
+        config entries
+            edit 1
+                set severity medium high critical
+            next
+        end
+    next
+    edit "wifi-default"
+        set comment "Default configuration for offloading WiFi traffic."
+        config entries
+            edit 1
+                set severity medium high critical
+            next
+        end
+    next
+    edit "all_default"
+        set comment "All predefined signatures with default setting."
+        config entries
+            edit 1
+            next
+        end
+    next
+    edit "all_default_pass"
+        set comment "All predefined signatures with PASS action."
+        config entries
+            edit 1
+                set action pass
+            next
+        end
+    next
+    edit "protect_http_server"
+        set comment "Protect against HTTP server-side vulnerabilities."
+        config entries
+            edit 1
+                set location server
+                set protocol HTTP
+            next
+        end
+    next
+    edit "protect_email_server"
+        set comment "Protect against email server-side vulnerabilities."
+        config entries
+            edit 1
+                set location server
+                set protocol SMTP POP3 IMAP
+            next
+        end
+    next
+    edit "protect_client"
+        set comment "Protect against client-side vulnerabilities."
+        config entries
+            edit 1
+                set location client
+            next
+        end
+    next
+    edit "high_security"
+        set comment "Blocks all Critical/High/Medium and some Low severity vulnerabilities"
+        set block-malicious-url enable
+        config entries
+            edit 1
+                set severity medium high critical
+                set status enable
+                set action block
+            next
+            edit 2
+                set severity low
+            next
+        end
+    next
+    edit "SQL-INJECTION DETECTIONS"
+        config entries
+            edit 1
+                set rule 9916
+                set status enable
+                set log-packet enable
+                set action block
+                set quarantine attacker
+            next
+        end
+    next
+end
+
+end
+
