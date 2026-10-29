@@ -1,4 +1,4 @@
-# Práctica #2 — AAA con RADIUS (NPS) en Router y Switch Cisco
+# Asignacion #2 — AAA con RADIUS (NPS) en Router y Switch Cisco
 
 > **Video de demostración:** [Ver video](#)
 
