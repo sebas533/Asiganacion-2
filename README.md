@@ -1,5 +1,4 @@
-Práctica #2 — Topología: AAA con RADIUS (NPS) en Router y Switch Cisco
-> **Video de demostración:** [Ver video](#)
+# Práctica #2 — AAA con RADIUS (NPS) en Router y Switch Cisco> **Video de demostración:** [Ver video](#)
 Asignatura: [SR] Estudiante: [Luis Sebastian Roble Perez] Matrícula: 2168
 ---
 1. Objetivo
