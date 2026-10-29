@@ -31,8 +31,6 @@ La red sale de mi matrícula, 2168: `10.21.68.0/24`, máscara `255.255.255.0` y 
 Equipo	Interfaz	Dirección
 R1	Fa0/0 hacia Switch	`10.21.68.1/24`
 SW1	Gi0/0 hacia R1	sin IP
-SW1	Gi0/1 hacia servidor	sin IP
-SW1	Gi0/2 hacia UbuntuSv	sin IP
 SW1	VLAN 1 (administración)	`10.21.68.2/24`
 SRV-AD	Ethernet1 (VMnet2)	`10.21.68.10/24`
 UbuntuSv	ens3	`10.21.68.100/24`
@@ -86,6 +84,7 @@ login on-failure log
 logging buffered 16384 informational
 ```
 ![Configuración del router](imagenes/user%20local%2Bradius%2Baaa%2Bsec%20line%2Bssh%20y%20ineterface%20brief%20router.png)
+
 5.2 Switch (SW1)
 La configuración AAA, RADIUS, usuario local, líneas y SSH es la misma que en el router. La IP de administración está en la `VLAN 1` (`10.21.68.2/24`) con gateway `10.21.68.1`.
 ![Configuración del switch](imagenes/user%20local%2Bradius%2Baaa%2Bsec%20line%2Bssh%20y%20ineterface%20brief%20switch.png)
