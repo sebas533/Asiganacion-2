@@ -178,9 +178,3 @@ Logs de autenticación, autorización y RADIUS en los equipos (`show logging`) y
 
 ---
 
-## 8. Running-configs
-
-| Equipo | Archivo |
-|---|---|
-| R1 | [`configs/R1-running-config.txt`](configs/R1-running-config.txt) |
-| SW1 | [`configs/SW1-running-config.txt`](configs/SW1-running-config.txt) |
