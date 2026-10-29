@@ -36,7 +36,7 @@ flowchart LR
     SW ---|"Gi0/2"| UB
 ```
 
-![Topología en GNS3](img%20inf%203/Topologia.png)
+![Topología en GNS3](https://raw.githubusercontent.com/sebas533/Asiganacion-2/main/imagenes/Topologia.png)
 
 | Equipo | Rol |
 |---|---|
@@ -90,7 +90,7 @@ Tres políticas de red con autenticación PAP, `Service-Type = Login` y el atrib
 
 Las tres se procesan **antes** de las políticas por defecto de "Denegar acceso".
 
-![Políticas de red en NPS](img%20inf%203/Politicas.png)
+![Políticas de red en NPS](https://raw.githubusercontent.com/sebas533/Asiganacion-2/main/imagenes/Politicas.png)
 
 ---
 
@@ -127,13 +127,13 @@ login on-failure log
 logging buffered 16384 informational
 ```
 
-![Configuración del router](img%20inf%203/user%20local%2Bradius%2Baaa%2Bsec%20line%2Bssh%20y%20ineterface%20brief%20router.png)
+![Configuración del router](https://raw.githubusercontent.com/sebas533/Asiganacion-2/main/imagenes/user%20local%2Bradius%2Baaa%2Bsec%20line%2Bssh%20y%20ineterface%20brief%20router.png)
 
 ### 5.2 Switch (SW1)
 
 Misma configuración de AAA, RADIUS, usuario local, líneas y SSH. La IP de administración está en la `VLAN 1` (`10.21.68.2/24`).
 
-![Configuración del switch](img%20inf%203/user%20local%2Bradius%2Baaa%2Bsec%20line%2Bssh%20y%20ineterface%20brief%20switch.png)
+![Configuración del switch](https://raw.githubusercontent.com/sebas533/Asiganacion-2/main/imagenes/user%20local%2Bradius%2Baaa%2Bsec%20line%2Bssh%20y%20ineterface%20brief%20switch.png)
 
 ### 5.3 SSH
 
@@ -154,19 +154,19 @@ El nivel se verifica con `show privilege` justo después de iniciar sesión, ant
 
 ### 6.1 `user0` (nivel 0)
 
-![user0](img%20inf%203/user%200%20sin%20enablke%20privilegio%20para%20muestra.png)
+![user0](https://raw.githubusercontent.com/sebas533/Asiganacion-2/main/imagenes/user%200%20sin%20enablke%20privilegio%20para%20muestra.png)
 
 ### 6.2 `user5` (nivel 5)
 
-![user5](img%20inf%203/user%205%20y%20privilegio.png)
+![user5](https://raw.githubusercontent.com/sebas533/Asiganacion-2/main/imagenes/user%205%20y%20privilegio.png)
 
 ### 6.3 `user10` (nivel 10)
 
-![user10](img%20inf%203/Usuario%20y%20privilegio%2010.png)
+![user10](https://raw.githubusercontent.com/sebas533/Asiganacion-2/main/imagenes/Usuario%20y%20privilegio%2010.png)
 
 ### 6.4 Demostración de los tres niveles
 
-![Niveles de privilegio](img%20inf%203/Usuarios%20y%20niveles%20demostracion.png)
+![Niveles de privilegio](https://raw.githubusercontent.com/sebas533/Asiganacion-2/main/imagenes/Usuarios%20y%20niveles%20demostracion.png)
 
 ---
 
@@ -174,7 +174,7 @@ El nivel se verifica con `show privilege` justo después de iniciar sesión, ant
 
 Logs de autenticación, autorización y RADIUS en los equipos (`show logging`) y eventos de acceso de NPS en el servidor.
 
-![Logs](img%20inf%203/logs.png)
+![Logs](https://raw.githubusercontent.com/sebas533/Asiganacion-2/main/imagenes/logs.png)
 
 ---
 
