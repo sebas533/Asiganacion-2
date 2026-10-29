@@ -1,6 +1,6 @@
 # Asignacion #2 — AAA con RADIUS (NPS) en Router y Switch Cisco
 
-> **Video de demostración:** [Ver video](#https://youtu.be/rcTKsu8TtT4)
+> **Video de demostración:** [Ver video](https://youtu.be/rcTKsu8TtT4)
 
 **Asignatura:** SR | **Estudiante:** Luis Sebastian Roble Perez | **Matrícula:** 2168
 
