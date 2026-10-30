@@ -263,15 +263,8 @@ La existencia de una cuenta local o de un nivel de privilegio configurado no dem
 
 Las pruebas permiten verificar la conectividad entre los dispositivos y observar el comportamiento del sistema de autenticación.
 
-### 9.1. Prueba de conectividad
 
-La prueba de conectividad permite comprobar la comunicación IP entre los equipos de la infraestructura.
-
-![Prueba de conectividad desde el servidor hacia el router y el switch](./Imagenes/ping%20desde%20el%20sv%20al%20router%20y%20el%20sw.png)
-
-Los resultados deben analizarse para determinar si los equipos responden correctamente y si existe conectividad con las direcciones IP configuradas.
-
-### 9.2. Pruebas de autenticación AAA
+### 9.1. Pruebas de autenticación AAA
 
 Las pruebas de autenticación permiten documentar el comportamiento del sistema ante los accesos realizados por los usuarios.
 
