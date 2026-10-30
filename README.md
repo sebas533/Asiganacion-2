@@ -1,19 +1,19 @@
-# Implementación de AAA con RADIUS y Windows Server NPS
+# 🔐 Laboratorio AAA, RADIUS y Windows Server NPS
 
 <p align="center">
-  <img src="Imagenes/Infraestructura.png" alt="Topología de la infraestructura" width="800">
+  <img src="./Imagenes/diagrama-infraestructura.png" alt="Diagrama de infraestructura del laboratorio" width="900">
 </p>
 
 <p align="center">
-  <strong>Laboratorio de administración y seguridad de redes</strong><br>
-  Autenticación, autorización y auditoría centralizada mediante AAA, RADIUS y Network Policy Server.
+  <strong>Implementación de autenticación, autorización y auditoría en dispositivos Cisco</strong>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Network-Cisco-blue?style=for-the-badge" alt="Cisco">
-  <img src="https://img.shields.io/badge/Authentication-RADIUS-green?style=for-the-badge" alt="RADIUS">
-  <img src="https://img.shields.io/badge/Server-Windows_Server-0078D4?style=for-the-badge" alt="Windows Server">
-  <img src="https://img.shields.io/badge/OS-Ubuntu-E95420?style=for-the-badge" alt="Ubuntu">
+  <img src="https://img.shields.io/badge/Cisco-Networking-blue?style=for-the-badge" alt="Cisco Networking">
+  <img src="https://img.shields.io/badge/AAA-Security-green?style=for-the-badge" alt="AAA Security">
+  <img src="https://img.shields.io/badge/RADIUS-Authentication-orange?style=for-the-badge" alt="RADIUS">
+  <img src="https://img.shields.io/badge/Windows_Server-NPS-0078D4?style=for-the-badge" alt="Windows Server NPS">
+  <img src="https://img.shields.io/badge/Linux-Ubuntu-E95420?style=for-the-badge" alt="Ubuntu">
 </p>
 
 ## 📑 Índice
@@ -23,251 +23,311 @@
 - [3. Descripción de la infraestructura](#-3-descripción-de-la-infraestructura)
 - [4. Direccionamiento IP](#-4-direccionamiento-ip)
 - [5. Topología de red](#-5-topología-de-red)
-- [6. Configuración de los dispositivos](#-6-configuración-de-los-dispositivos)
+- [6. Configuración de los dispositivos Cisco](#-6-configuración-de-los-dispositivos-cisco)
 - [7. Configuración de Windows Server NPS](#-7-configuración-de-windows-server-nps)
 - [8. Usuarios y privilegios](#-8-usuarios-y-privilegios)
-- [9. Pruebas y validaciones](#-9-pruebas-y-validaciones)
+- [9. Pruebas de conectividad y autenticación](#-9-pruebas-de-conectividad-y-autenticación)
 - [10. Registros y auditoría](#-10-registros-y-auditoría)
-- [11. Configuraciones del laboratorio](#-11-configuraciones-del-laboratorio)
+- [11. Archivos de configuración](#-11-archivos-de-configuración)
 - [12. Video de demostración](#-12-video-de-demostración)
 - [13. Conclusiones](#-13-conclusiones)
 
+---
+
 ## 📌 1. Introducción
 
-Este proyecto consiste en la implementación de un laboratorio de redes orientado a la seguridad y la administración centralizada de usuarios mediante el modelo AAA (Authentication, Authorization and Accounting).
+El presente proyecto consiste en la implementación de un laboratorio de redes y seguridad informática basado en el modelo AAA (Authentication, Authorization and Accounting).
 
-La infraestructura integra dispositivos Cisco, un servidor Windows con Network Policy Server (NPS) y un equipo Ubuntu. El objetivo es centralizar la autenticación de los accesos administrativos a los dispositivos de red mediante el protocolo RADIUS, gestionar los niveles de autorización y disponer de registros que permitan revisar los intentos de acceso.
+La infraestructura integra dispositivos Cisco, un servidor Windows con Network Policy Server (NPS) y un equipo Ubuntu Server. El propósito es configurar y documentar un entorno de administración de red que permita trabajar con autenticación centralizada mediante RADIUS, controlar los permisos de acceso y revisar los registros generados durante las pruebas.
 
-El laboratorio permite estudiar cómo interactúan los dispositivos de red con un servidor de autenticación y cómo las políticas de acceso contribuyen a mejorar el control y la seguridad de la infraestructura.
+A través de esta práctica se estudia la relación entre los dispositivos de red y el servidor de autenticación, así como la importancia de establecer mecanismos que permitan verificar las credenciales de los usuarios y administrar sus privilegios.
 
 ## 🎯 2. Objetivos
 
 ### Objetivo general
 
-Implementar un sistema de autenticación, autorización y auditoría centralizada para la administración de dispositivos de red utilizando AAA, RADIUS y Windows Server NPS.
+Implementar y documentar un sistema AAA para la administración segura de dispositivos de red, utilizando Cisco IOS, RADIUS y Windows Server NPS.
 
 ### Objetivos específicos
 
-- Configurar el direccionamiento IP de los dispositivos del laboratorio.
-- Establecer la conectividad entre el router, el switch y los servidores.
-- Configurar los parámetros AAA en los dispositivos Cisco.
-- Integrar Windows Server NPS como servidor RADIUS.
-- Definir usuarios, permisos y niveles de privilegio.
-- Comprobar los accesos correctos y los intentos de autenticación fallidos.
-- Revisar los registros de eventos para verificar la actividad de autenticación.
-- Documentar las configuraciones y las evidencias obtenidas durante las pruebas.
+- Configurar el direccionamiento IP de los dispositivos.
+- Establecer conectividad entre el router, el switch y los servidores.
+- Configurar los parámetros de autenticación AAA en los dispositivos Cisco.
+- Registrar los dispositivos de red como clientes RADIUS.
+- Configurar las políticas necesarias para procesar las solicitudes de autenticación.
+- Comprobar los usuarios y sus respectivos niveles de privilegio.
+- Realizar pruebas de conectividad y autenticación.
+- Revisar los registros de eventos relacionados con los intentos de acceso.
+- Documentar las configuraciones y evidencias obtenidas durante el laboratorio.
 
 ## 🖥️ 3. Descripción de la infraestructura
 
-La infraestructura está compuesta por los siguientes dispositivos:
+La infraestructura está compuesta por cuatro elementos principales:
 
-| Dispositivo | Función |
-|---|---|
-| Router Cisco | Proporciona conectividad de capa 3 y permite administrar los accesos al dispositivo. |
-| Switch Cisco | Conecta los equipos de la red local y permite administrar los accesos al dispositivo. |
-| Windows Server | Aloja los servicios y las políticas de NPS para la autenticación RADIUS. |
-| Ubuntu Server | Equipo Linux integrado en el laboratorio para tareas de conectividad y administración. |
+| Dispositivo | Dirección IP | Función |
+|---|---|---|
+| Router Cisco R1 | `10.21.68.1` | Enrutamiento y administración de la red. |
+| Switch Cisco SW1 | `10.21.68.2` | Conectividad y administración de la red local. |
+| Windows Server | `10.21.68.10` | Servidor destinado a los servicios de autenticación NPS/RADIUS. |
+| Ubuntu Server | `10.21.68.100` | Equipo Linux integrado en el laboratorio. |
 
-La comunicación entre los dispositivos permite realizar las pruebas de conectividad y validar la configuración del sistema AAA.
+El router R1 y el switch SW1 participan en las pruebas de administración y autenticación. Windows Server proporciona el servicio NPS/RADIUS cuando se encuentra configurado correctamente. Ubuntu Server forma parte del entorno de pruebas y conectividad.
+
+La comunicación entre los dispositivos y el servidor RADIUS depende del direccionamiento, las rutas, las reglas de firewall y los parámetros de autenticación configurados.
 
 ## 🌐 4. Direccionamiento IP
 
-El laboratorio utiliza la red `10.21.68.0/24`.
+El laboratorio utiliza la red privada `10.21.68.0/24`.
 
-| Dispositivo | Dirección IP | Máscara de subred | Puerta de enlace |
+| Dispositivo | Dirección IP | Máscara | Puerta de enlace |
 |---|---|---|---|
-| Router Cisco | `10.21.68.1` | `255.255.255.0` | No aplica |
-| Switch Cisco | `10.21.68.2` | `255.255.255.0` | `10.21.68.1` |
-| Windows Server / NPS | `10.21.68.10` | `255.255.255.0` | `10.21.68.1` |
+| Router R1 | `10.21.68.1` | `255.255.255.0` | No aplica |
+| Switch SW1 | `10.21.68.2` | `255.255.255.0` | `10.21.68.1` |
+| Windows Server | `10.21.68.10` | `255.255.255.0` | `10.21.68.1` |
 | Ubuntu Server | `10.21.68.100` | `255.255.255.0` | `10.21.68.1` |
 
-> **Nota:** La tabla documenta el direccionamiento previsto para el laboratorio. Las máscaras y puertas de enlace deben coincidir con los valores configurados realmente en cada equipo.
+**Nota:** las máscaras y puertas de enlace indicadas deben coincidir con la configuración real de cada equipo.
 
-### Configuración IP de Windows Server
+### 4.1. Configuración IP de Windows Server
 
-Windows Server utiliza la dirección `10.21.68.10` para alojar los servicios de red correspondientes al laboratorio.
+Windows Server utiliza la dirección `10.21.68.10` dentro de la infraestructura.
 
-![Configuración IP del servidor Windows](<Imagenes/IP CONF servidor de window.png>)
+![Configuración IP del servidor Windows](./Imagenes/IP%20CONF%20servidor%20de%20window.png)
 
-### Configuración IP de Ubuntu
+### 4.2. Configuración IP de Ubuntu Server
 
-Ubuntu Server utiliza la dirección `10.21.68.100` para su integración en la red local.
+Ubuntu Server utiliza la dirección `10.21.68.100` para su integración en la red.
 
-![Configuración IP de Ubuntu](<Imagenes/IP CONSOLA DE UBSV.png>)
+![Configuración IP de Ubuntu Server](./Imagenes/IP%20CONSOLA%20DE%20UBSV.png)
 
 ## 🗺️ 5. Topología de red
 
-La siguiente imagen presenta la infraestructura implementada para el laboratorio.
+### 5.1. Diagrama de infraestructura
 
-![Topología de la infraestructura](<Imagenes/Infraestructura.png>)
+El siguiente diagrama representa los dispositivos principales y sus direcciones IP dentro del laboratorio.
 
-La red está organizada para permitir la comunicación entre los dispositivos Cisco y los servidores. El router utiliza la dirección `10.21.68.1`, mientras que el switch utiliza `10.21.68.2`.
+![Diagrama de infraestructura AAA RADIUS NPS](./Imagenes/diagrama-infraestructura.png)
 
-Windows Server, con la dirección `10.21.68.10`, participa en la implementación de los servicios de autenticación y autorización. Ubuntu Server utiliza la dirección `10.21.68.100`.
+El router R1 utiliza la dirección `10.21.68.1`, mientras que el switch SW1 utiliza `10.21.68.2`. Windows Server se encuentra en `10.21.68.10` y Ubuntu Server en `10.21.68.100`.
 
-El flujo de autenticación RADIUS depende de que el router y el switch estén configurados como clientes RADIUS y puedan comunicarse con el servidor NPS.
+El servidor NPS debe poder recibir las solicitudes RADIUS de los dispositivos Cisco que estén registrados como clientes y configurados para utilizarlo.
 
-## ⚙️ 6. Configuración de los dispositivos
+### 5.2. Evidencia de la infraestructura implementada
 
-### 6.1. Configuración del router Cisco
+Esta captura corresponde a la evidencia original de la infraestructura utilizada en la práctica.
 
-El router se configura con el direccionamiento correspondiente y los parámetros de administración y autenticación requeridos por el laboratorio.
+![Infraestructura original del laboratorio](./Imagenes/Infraestructura.png)
 
-La configuración AAA permite definir los métodos de autenticación que utilizará el dispositivo y, según los métodos configurados, recurrir al servidor RADIUS para validar las credenciales de los usuarios.
+El diagrama facilita la comprensión de la organización lógica de la red, mientras que la captura original sirve como evidencia del entorno implementado.
 
-**Evidencia de configuración:**
+## ⚙️ 6. Configuración de los dispositivos Cisco
 
-![Configuración del router](<Imagenes/Config router.png>)
+### 6.1. Configuración del router R1
 
-### 6.2. Configuración del switch Cisco
+El router R1 se configura con los parámetros de direccionamiento y administración necesarios para el laboratorio.
 
-El switch utiliza la dirección `10.21.68.2` para su administración. Su configuración contempla los parámetros de red y los mecanismos de autenticación necesarios para las pruebas.
+La configuración AAA permite definir los métodos utilizados para autenticar las conexiones administrativas. Cuando RADIUS está configurado como método de autenticación, el router puede enviar solicitudes al servidor NPS para validar las credenciales de los usuarios.
 
-**Evidencia de configuración:**
+![Configuración del router R1](./Imagenes/Config%20router.png)
 
-![Configuración del switch](<Imagenes/config SW.png>)
+### 6.2. Configuración del switch SW1
+
+El switch SW1 utiliza la dirección de administración `10.21.68.2`.
+
+Su configuración contempla los parámetros de red y los mecanismos de autenticación utilizados durante las pruebas.
+
+![Configuración del switch SW1](./Imagenes/config%20SW.png)
 
 ### 6.3. Verificación de interfaces
 
-El comando `show ip interface brief` permite consultar las interfaces, sus direcciones IP y su estado operativo.
+La verificación de las interfaces permite comprobar las direcciones IP y el estado operativo de los puertos.
 
-En el switch se utiliza `show interfaces status` o `show interfaces` para revisar el estado de los puertos, según la información que se necesite comprobar.
+El comando `show ip interface brief` presenta un resumen de las interfaces de capa 3. Para comprobar el estado de los puertos de un switch, también pueden utilizarse comandos como `show interfaces status`, dependiendo del modelo y del sistema operativo.
 
-**Evidencias:**
+**Evidencia de interfaces del switch:**
 
-![Interfaces del switch](<Imagenes/SW SHOW INT BRIEF.png>)
+![Estado de las interfaces del switch](./Imagenes/SW%20SHOW%20INT%20BRIEF.png)
 
-![Resumen de interfaces IP](<Imagenes/show ip interface brief.png>)
+**Resumen de interfaces IP:**
+
+![Resumen de interfaces IP](./Imagenes/show%20ip%20interface%20brief.png)
 
 ## 🔐 7. Configuración de Windows Server NPS
 
-Network Policy Server (NPS) es el componente de Windows Server que permite implementar políticas de acceso a la red y utilizar RADIUS para procesar solicitudes de autenticación y autorización.
+Network Policy Server (NPS) es el componente de Windows Server que permite implementar políticas de acceso a la red y procesar solicitudes de autenticación y autorización mediante RADIUS.
 
-En este laboratorio, NPS se utiliza para centralizar la validación de los accesos administrativos de los dispositivos de red.
+En este laboratorio, NPS se utiliza para centralizar la validación de los accesos de los dispositivos Cisco.
 
-### 7.1. Configuración de clientes RADIUS
+### 7.1. Clientes RADIUS
 
-Para que el servidor NPS pueda procesar las solicitudes, los dispositivos que actúan como clientes RADIUS deben estar registrados con sus direcciones IP y sus respectivos secretos compartidos.
+Para que NPS pueda procesar las solicitudes de autenticación, los dispositivos que actúan como clientes RADIUS deben registrarse con sus respectivas direcciones IP y secretos compartidos.
 
-En este laboratorio, las direcciones de los dispositivos Cisco son:
+Los dispositivos del laboratorio son:
 
-- Router: `10.21.68.1`
-- Switch: `10.21.68.2`
+| Cliente RADIUS | Dirección IP |
+|---|---|
+| Router R1 | `10.21.68.1` |
+| Switch SW1 | `10.21.68.2` |
 
-El secreto compartido debe coincidir en el dispositivo Cisco y en la configuración del cliente RADIUS correspondiente en NPS.
+El secreto compartido configurado en cada cliente RADIUS debe coincidir con el establecido en el dispositivo Cisco correspondiente.
 
-![Clientes RADIUS del router y el switch](<Imagenes/Clientes de Radius R1 Y SW1.png>)
+![Clientes RADIUS de R1 y SW1](./Imagenes/Clientes%20de%20Radius%20R1%20Y%20SW1.png)
 
 ### 7.2. Configuración de directivas de grupo
 
-Las directivas de grupo permiten administrar determinadas configuraciones de Windows de manera centralizada, cuando el equipo está integrado en un dominio compatible con estas funciones.
+Las directivas de grupo permiten administrar determinadas configuraciones de usuarios y equipos Windows de forma centralizada, cuando el entorno está integrado en un dominio compatible.
 
-Las directivas que se muestran en las evidencias forman parte de la configuración administrativa documentada en el laboratorio.
+La siguiente evidencia documenta las directivas configuradas durante la práctica.
 
-![Directivas de grupo](<Imagenes/Directivas de grupo.png>)
+![Directivas de grupo](./Imagenes/Directivas%20de%20grupo.png)
 
 ### 7.3. Detalles de las directivas
 
-La siguiente evidencia muestra los parámetros de una de las directivas configuradas.
+Esta captura muestra los detalles de una de las directivas configuradas en el entorno Windows.
 
-![Detalles de una directiva](<Imagenes/detalles de una de las directivas.png>)
+![Detalles de una de las directivas](./Imagenes/detalles%20de%20una%20de%20las%20directivas.png)
 
-**Importante:** Las directivas de grupo de Windows y las políticas de red de NPS son mecanismos distintos. Las primeras administran configuraciones de usuarios y equipos Windows; las segundas determinan cómo se procesan y autorizan las solicitudes de acceso RADIUS.
+**Nota:** las directivas de grupo de Windows y las políticas de red de NPS son mecanismos diferentes. Las primeras administran configuraciones de usuarios y equipos Windows, mientras que las segundas determinan cómo se procesan y autorizan las solicitudes RADIUS.
+
+### 7.4. Configuración de servidores AAA
+
+La siguiente evidencia corresponde a la configuración relacionada con los servidores AAA del dispositivo de red.
+
+![Configuración de servidores AAA](./Imagenes/aaa%20servers.png)
+
+La configuración debe verificarse junto con los parámetros de RADIUS, las políticas de autenticación y la conectividad con Windows Server.
 
 ## 👤 8. Usuarios y privilegios
 
-La gestión de usuarios permite comprobar cómo se aplican diferentes niveles de acceso a los dispositivos de red.
+En este apartado se organizan las evidencias de los usuarios por dispositivo para diferenciar las pruebas realizadas en el router R1 de las realizadas en el switch SW1.
 
-En Cisco IOS, el nivel de privilegio 15 corresponde al nivel administrativo más alto. Los permisos efectivos dependen de la configuración del dispositivo y de las políticas de autorización aplicadas.
+Los niveles de privilegio observados dependen de la configuración de cada dispositivo y de las políticas de autorización aplicadas.
 
-### 8.1. Evidencias de usuarios
+### 8.1. Usuarios del router R1
 
-**Usuario configurado:**
+#### Usuario 0 en R1
 
-![Usuario configurado](<Imagenes/User.png>)
+Esta evidencia documenta las pruebas relacionadas con el usuario 0 en el router R1.
 
-**Usuario en el switch:**
+![Usuario 0 en R1](./Imagenes/user0%20en%20r1.png)
 
-![Usuario del switch](<Imagenes/User0 sw.png>)
+#### Usuario 5 y privilegios en R1
 
-**Usuario adicional en el switch:**
+Esta captura documenta las pruebas de acceso y privilegios correspondientes al usuario 5 en R1.
 
-![Usuario adicional del switch](<Imagenes/User5 SW.png>)
+![Usuario 5 y privilegios en R1](./Imagenes/User%205%20privilegios%20r1.png)
 
-**Usuario en el router:**
+#### Usuario 10 y privilegios en R1
 
-![Usuario en el router](<Imagenes/user0 en r1.png>)
+Esta captura corresponde a las pruebas del usuario 10 y sus privilegios en el router R1.
 
-**Usuario 10 en el switch:**
+![Usuario 10 y privilegios en R1](./Imagenes/user10%20privilegios%20R1.png)
 
-![Usuario 10 en el switch](<Imagenes/user10 SW.png>)
+### 8.2. Usuarios del switch SW1
 
-### 8.2. Verificación de privilegios
+#### Usuario 0 en SW1
 
-Las siguientes capturas documentan las pruebas relacionadas con los niveles de privilegio asignados a los usuarios.
+La siguiente captura documenta la evidencia del usuario 0 en el switch.
 
-![Privilegios de usuario en el router](<Imagenes/User 5 privilegios r1.png>)
+![Usuario 0 en SW1](./Imagenes/User0%20sw.png)
 
-![Privilegios de usuario 10 en el router](<Imagenes/user10 privilegios R1.png>)
+#### Usuario 5 en SW1
 
-![Privilegio administrativo nivel 15](<Imagenes/privilege de admin en 15.png>)
+Esta captura corresponde a las pruebas relacionadas con el usuario 5 en el switch SW1.
 
-Estas pruebas permiten documentar los niveles de acceso disponibles y comprobar si los permisos observados corresponden a la configuración realizada.
+![Usuario 5 en SW1](./Imagenes/User5%20SW.png)
 
-## 🧪 9. Pruebas y validaciones
+#### Usuario 10 en SW1
 
-Las pruebas de validación permiten comprobar la conectividad de la infraestructura y el comportamiento del sistema de autenticación.
+Esta captura documenta las pruebas relacionadas con el usuario 10 en el switch.
 
-### 9.1. Pruebas de conectividad
+![Usuario 10 en SW1](./Imagenes/user10%20SW.png)
 
-Se realizan pruebas de comunicación entre los equipos para verificar que exista conectividad IP entre los dispositivos que participan en el laboratorio.
+### 8.3. Evidencia adicional de usuarios
 
-![Prueba de conectividad](<Imagenes/ping desde el sv al router y el sw.png>)
+La siguiente captura contiene información adicional sobre los usuarios configurados en el laboratorio.
+
+![Información adicional de usuarios](./Imagenes/User.png)
+
+### 8.4. Privilegio administrativo nivel 15
+
+En Cisco IOS, el nivel de privilegio 15 corresponde al nivel administrativo más alto. La configuración efectiva determina los comandos que puede ejecutar cada usuario.
+
+Esta evidencia documenta las pruebas relacionadas con el privilegio administrativo.
+
+![Privilegio administrativo nivel 15](./Imagenes/privilege%20de%20admin%20en%2015.png)
+
+La existencia de una cuenta local o de un nivel de privilegio configurado no demuestra por sí sola que la autenticación centralizada mediante RADIUS esté funcionando. Para comprobarlo, deben revisarse también las solicitudes procesadas por NPS.
+
+## 🧪 9. Pruebas de conectividad y autenticación
+
+Las pruebas permiten verificar la conectividad entre los dispositivos y observar el comportamiento del sistema de autenticación.
+
+### 9.1. Prueba de conectividad
+
+La prueba de conectividad permite comprobar la comunicación IP entre los equipos de la infraestructura.
+
+![Prueba de conectividad desde el servidor hacia el router y el switch](./Imagenes/ping%20desde%20el%20sv%20al%20router%20y%20el%20sw.png)
+
+Los resultados deben analizarse para determinar si los equipos responden correctamente y si existe conectividad con las direcciones IP configuradas.
 
 ### 9.2. Pruebas de autenticación AAA
 
-Las pruebas AAA permiten revisar el comportamiento de la autenticación de usuarios y comprobar si las solicitudes son aceptadas o rechazadas según la configuración aplicada.
+Las pruebas de autenticación permiten documentar el comportamiento del sistema ante los accesos realizados por los usuarios.
 
-![Pruebas de autenticación AAA](<Imagenes/Pruebas test AAA.png>)
+![Pruebas de autenticación AAA](./Imagenes/Pruebas%20test%20AAA.png)
+
+Para verificar la autenticación centralizada, es importante confirmar que las solicitudes lleguen a NPS y que el resultado corresponda con las políticas configuradas.
 
 ### 9.3. Prueba de autenticación fallida
 
-Los intentos de autenticación fallidos permiten comprobar el comportamiento del sistema ante credenciales incorrectas o solicitudes que no cumplen las políticas de acceso.
+Los intentos de autenticación fallidos permiten analizar el comportamiento del sistema cuando se introducen credenciales incorrectas o se produce un rechazo por las políticas de acceso.
 
-![Inicio de sesión fallido](<Imagenes/loggin fallido.png>)
+![Prueba de inicio de sesión fallido](./Imagenes/loggin%20fallido.png)
 
-Para confirmar que el rechazo fue procesado por NPS, debe revisarse el registro correspondiente en el servidor.
+El registro correspondiente en NPS permite investigar el motivo del rechazo cuando la solicitud ha sido procesada por el servidor.
 
 ## 📊 10. Registros y auditoría
 
-El registro de eventos permite analizar los intentos de acceso y consultar información relacionada con la autenticación.
+Los registros de eventos permiten consultar información sobre las solicitudes procesadas y los intentos de autenticación.
 
-En Windows Server, los eventos de NPS pueden revisarse mediante el Visor de eventos y los registros de seguridad correspondientes.
+La revisión de estos registros ayuda a identificar errores, diagnosticar problemas y documentar el comportamiento del sistema durante las pruebas.
 
 ### 10.1. Registros de actividad
 
-![Registros de logging](<Imagenes/logs de logging.png>)
+La siguiente evidencia corresponde a los registros de actividad revisados durante el laboratorio.
+
+![Registros de actividad](./Imagenes/logs%20de%20logging.png)
 
 ### 10.2. Visor de eventos de NPS
 
-![Visor de eventos de NPS](<Imagenes/visor de eventos de NPS.png>)
+El Visor de eventos permite consultar los eventos disponibles relacionados con los servicios de Windows y la autenticación.
 
-La revisión de los registros ayuda a identificar errores de autenticación, comprobar solicitudes procesadas y facilitar el diagnóstico de problemas.
+![Visor de eventos de NPS](./Imagenes/visor%20de%20eventos%20de%20NPS.png)
 
-## 📁 11. Configuraciones del laboratorio
+Los registros deben revisarse para determinar si las solicitudes fueron aceptadas, rechazadas o afectadas por algún error de configuración.
 
-El repositorio contiene una carpeta llamada `show running`, en la que se almacenan los archivos de configuración y las salidas de los comandos utilizados para documentar los dispositivos.
+## 📁 11. Archivos de configuración
 
-| Archivo | Descripción |
-|---|---|
-| [`Router.txt`](<show running/Router.txt>) | Configuración y comandos documentados del router. |
-| [`SW1#show running.txt`](<show running/SW1#show running.txt>) | Configuración y comandos documentados del switch. |
+El repositorio incluye la carpeta `show running`, donde se almacenan archivos con las configuraciones y salidas de los comandos utilizados para documentar los dispositivos.
 
-Estos archivos permiten consultar las configuraciones utilizadas durante el laboratorio sin depender únicamente de las capturas de pantalla.
+### 11.1. Configuración del router
+
+Archivo: [`Router.txt`](./show%20running/Router.txt)
+
+Este archivo permite consultar la configuración documentada del router R1 y revisar los parámetros utilizados durante el laboratorio.
+
+### 11.2. Configuración del switch
+
+Archivo: [`SW1#show running.txt`](./show%20running/SW1%23show%20running.txt)
+
+Este archivo contiene la configuración documentada del switch SW1 y sirve como referencia para revisar los parámetros aplicados al dispositivo.
+
+La documentación de estas configuraciones complementa las capturas de pantalla y facilita la revisión técnica del laboratorio.
 
 ## 🎥 12. Video de demostración
 
-En el siguiente video se presenta la demostración del laboratorio y las pruebas realizadas durante su implementación.
+El siguiente video presenta la demostración del laboratorio y permite complementar las evidencias documentadas en este repositorio.
 
 <p align="center">
   <a href="https://youtu.be/-LEGZHsq84I">
@@ -281,13 +341,15 @@ En el siguiente video se presenta la demostración del laboratorio y las pruebas
 
 ## ✅ 13. Conclusiones
 
-Con este laboratorio pude trabajar con la configuración de dispositivos Cisco y la implementación de un sistema de autenticación centralizada mediante RADIUS y Windows Server NPS. También pude documentar las direcciones IP, revisar los privilegios de los usuarios y realizar pruebas de conectividad y autenticación.
+Con este laboratorio pude trabajar con la configuración de dispositivos Cisco y la implementación de un entorno de autenticación centralizada mediante RADIUS y Windows Server NPS. También pude documentar el direccionamiento IP, organizar las pruebas de usuarios y privilegios y revisar las evidencias de conectividad y autenticación.
 
-La práctica me permitió comprender mejor la importancia de centralizar el control de acceso y mantener registros que ayuden a revisar los intentos de inicio de sesión. Además, la documentación de las configuraciones y las evidencias facilita la verificación del trabajo realizado.
+La práctica me permitió comprender mejor la importancia de controlar los accesos administrativos, aplicar políticas de seguridad y revisar los registros de eventos para investigar posibles errores o intentos de acceso fallidos.
+
+Finalmente, la documentación de las configuraciones, las capturas y el video de demostración permite presentar de manera organizada el trabajo realizado y facilita su revisión.
 
 ---
 
 <p align="center">
   <strong>Laboratorio de redes y seguridad informática</strong><br>
-  Documentación técnica del proyecto AAA, RADIUS y Windows Server NPS.
+  AAA · RADIUS · Cisco IOS · Windows Server NPS · Ubuntu Server
 </p>
