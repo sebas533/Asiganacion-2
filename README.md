@@ -116,7 +116,7 @@ El servidor NPS debe poder recibir las solicitudes RADIUS de los dispositivos Ci
 
 Esta captura corresponde a la evidencia original de la infraestructura utilizada en la práctica.
 
-![Infraestructura original del laboratorio](./Imagenes/Infraestructura.png)
+![Infraestructura original del laboratorio](./Imagenes/Infraestrucutura.png)
 
 El diagrama facilita la comprensión de la organización lógica de la red, mientras que la captura original sirve como evidencia del entorno implementado.
 
